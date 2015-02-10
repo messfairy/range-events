@@ -54,7 +54,7 @@ deadMouse.kick();
 
 var Monster = Item.extend({
     construct: function(name, dangerous){
-        Item.construct.call(this, name);
+        this.base(name);
         this.dangerous = dangerous;
     },
     kick: function(){
@@ -68,8 +68,8 @@ var Monster = Item.extend({
 
 var DetailedMonster = DetailedItem.extend({
     construct: function(name, description, dangerous){
-        DetailedItem.constructor.call(this, name, description)
-        Monster.constructor.call(this, name, dangerous);
+        this.base(name, description);
+        Monster.construct.call(this, name, dangerous);
     },
     kick: Monster.kick
 });

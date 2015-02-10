@@ -32,12 +32,12 @@ Object.prototype.extend = function (properties) {
     forEachIn(properties, function (name, value) {
         result[name] = value;
     });
+    result.base = this.construct; //父类构造器
     return result;
 };
 
 Object.prototype.isA = function (prototype) {
-    var DummyConstructor = function () {
-    };
+    var DummyConstructor = function () {};
     DummyConstructor.prototype = prototype;
     return this instanceof DummyConstructor;
 };
