@@ -1,2 +1,2 @@
 # range-events
-ruby实现消息发布树
+分别用ruby和js实现消息发布树
