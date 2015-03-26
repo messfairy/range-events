@@ -1,39 +1,38 @@
-/**
- * Created by hasee-pc on 2015/2/11.
- */
-var undefined;
-var clone = function (object) {
-    if (Object.create) return Object.create(object);
-    var DummyConstructor = function () {};
-    DummyConstructor.prototype = object;
-    return new DummyConstructor;
-};
-
-var forEachIn = function (object, fn) {
-    for (var name in object) {
-        if (Object.prototype.hasOwnProperty.call(object, name))
-            fn(name, object[name]);
+Object.prototype.clones = function(){
+    if(Object.create) {
+        return Object.create(this);
+    }else{
+        var OneShotConstructor = function(){};
+        OneShotConstructor.prototype = this;
+        return new OneShotConstructor();
     }
 };
-var mixInto = function (object, mixIn) {
-    forEachIn(mixIn, function(name, value){
-        object[name] = value;
-    });
-};
-Object.prototype.create = function () {
-    var object = clone(this);
-    if (object.construct != undefined)
-        object.construct.apply(object, arguments);
-    return object;
+
+Object.prototype.forEachIn = function(callback) {
+    for(var name in this)
+        if(this.hasOwnProperty(name))
+            callback(name, this[name]);
 };
 
-Object.prototype.extend = function (properties) {
-    var result = clone(this);
-    forEachIn(properties, function (name, value) {
-        result[name] = value;
+Object.prototype.mixins = function(fields) {
+    var self = this;
+    fields&&fields.forEachIn(function(name, value) {
+        self[name] = value;
     });
-    result.base = this.construct; //父类构造器
+    return this;
+};
+
+Object.prototype.extends = function(fields) {
+    var result = this.clones();
+    result.mixins(fields);
     return result;
+};
+
+Object.prototype.creates = function() {
+    var object = this.clones();
+    if (typeof object['construct'] === 'function')
+        object['construct'].apply(object, arguments);
+    return object;
 };
 
 Object.prototype.isA = function (prototype) {
